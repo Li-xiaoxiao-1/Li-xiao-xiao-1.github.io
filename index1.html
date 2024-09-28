@@ -10,11 +10,31 @@
     </script>
     <style>
         * {
-            border: 5px solid rgb(193, 26, 90);
+            border: 5px solid rgb(205, 97, 138);
             font-size: 35px;
             color: rgb(238, 213, 180);
             text-align: center;
-            background-color: azure;
+            background-color: rgb(137, 213, 213);
+        }
+        p{
+            border: 1px solid rgb(96, 96, 197);
+        }
+        header{
+            height: 25%;
+            background-color: rgb(164, 186, 91);
+        }
+         main{
+            height: 65% ;
+            background-color: bisque;
+        }
+        footer{
+            font-size: 0.4em;
+            height: 10%;
+            background-color: rgb(205, 135, 135);
+            color: white ;
+        }
+        button{
+            padding: 0.1em;
         }
     </style>
     <script>
@@ -26,12 +46,15 @@
         Welcome to my website
     </header>
     <main>
-        MyCotent
-    </main>
-    <footer>
-        my infomation
-    </footer>
+        <p id="en">abandon</p>
+        <p id="pr">/ə'bændən/</p>
+        <p id="cn">vt.离弃,丢弃;遗弃,抛弃;放弃</p>
+      </main>
+      <button id="loadCet">读入单词</button>
+      <button id="randWord">随机单词</button>
+    
     <script>
+        
         window.onload = function() {
             document.body.style.height = innerHeight - 38 + 'px';
             console.log("渲染web页元素: " + (new Date() - bigBang) + 'ms!');
@@ -41,6 +64,49 @@
             }
             console.log("CPU从1数到1亿: " + (new Date() - timer) + 'ms!');
         };
+         
     </script>
+     <footer>
+        江西科技师范大学李晓晓2024--2025
+      </footer>
+     <script>
+        let cet6String = '';
+        let loadCet = document.querySelector('button#loadCet');
+        let randWord = document.querySelector('button#randWord');
+
+        loadCet.onclick = function() {
+            fetch('cet6.txt')
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return res.text();
+                })
+                .then(txt => {
+                    cet6String = txt;
+                    console.log('File loaded successfully');
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        };
+
+        randWord.onclick = function() {
+            if (cet6String.length === 0) {
+                alert('请先加载单词文件！');
+                return;
+            }
+
+            let arr = cet6String.split('\r\n');
+            let rand = Math.floor(Math.random() * arr.length);
+            let str = arr[rand];
+            let tabIndex = str.indexOf('\t');
+            let en = str.slice(0, tabIndex);
+            let cn = str.slice(tabIndex + 1);
+
+            document.querySelector('p#en').textContent = en;
+            document.querySelector('p#cn').textContent = cn;
+        };
+</script>
 </body>
 </html>
